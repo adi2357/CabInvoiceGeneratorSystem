@@ -104,4 +104,16 @@ public class CabInvoiceServiceTest {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	@Test
+	public void givenUserId_WhenBothNormalAndPremiumRidesArePresent_ShouldReturnInvoiceSummary() {
+		RideRepository[] repositoryList = {new RideRepository(101, new Ride[]{new Ride(5.0, 10, "normal"), new Ride(0.3, 1, "premium"), new Ride(1.0, 5, "premium")}),
+										   new RideRepository(102, new Ride[]{new Ride(5.5, 10, "premium"), new Ride(0.2, 2, "normal"), new Ride(3.0, 7, "normal")}),
+										   new RideRepository(103, new Ride[]{new Ride(6.0, 10, "premium"), new Ride(0.1, 3, "premium"), new Ride(5.0, 10, "premium")})
+										   };
+		InvoiceService invoiceService = new InvoiceService(Arrays.asList(repositoryList));
+		EnhancedInvoice invoiceSummary = invoiceService.getInvoice(101);
+		EnhancedInvoice expectedInvoiceSummary = new EnhancedInvoice(3, 105.0);
+		Assert.assertEquals(expectedInvoiceSummary, invoiceSummary);
+	}
 }
