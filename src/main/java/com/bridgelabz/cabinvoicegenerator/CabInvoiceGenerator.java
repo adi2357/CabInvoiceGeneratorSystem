@@ -19,14 +19,19 @@ public class CabInvoiceGenerator {
 		return Math.max(MINIMUM_PREMIUM_RIDE_FARE, totalFare);
 	}
 
-	public double calculateFare(Ride[] rides) {
+	public double calculateFare(Ride[] rides) throws InvoiceException{
 		double totalFareForAllRides = 0.0;
-		for (Ride ride : rides)
-			totalFareForAllRides += calculateFare(ride.distance, ride.time);
+		for (Ride ride : rides) {
+			if(ride.category.equals("normal"))
+				totalFareForAllRides += calculateFare(ride.distance, ride.time);
+			else if(ride.category.equals("premium"))
+				totalFareForAllRides += calculatePremiumRideFare(ride.distance, ride.time);
+			else throw new InvoiceException("Invalid ride category", InvoiceException.ExceptionType.INVALID_RIDE_TYPE);
+		}
 		return totalFareForAllRides;
 	}
 
-	public EnhancedInvoice getInvoiceSummary(Ride[] rides) {
+	public EnhancedInvoice getInvoiceSummary(Ride[] rides) throws InvoiceException {
 		double totalFare = calculateFare(rides);
 		return new EnhancedInvoice(rides.length, totalFare);
 	}

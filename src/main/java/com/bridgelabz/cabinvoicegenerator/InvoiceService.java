@@ -18,7 +18,9 @@ public class InvoiceService {
 		EnhancedInvoice invoiceSummary = null;
 		for (RideRepository userRides : repository) {
 			if (userRides.userId == userId) {
-				invoiceSummary = new CabInvoiceGenerator().getInvoiceSummary(userRides.rides);
+				try {
+					invoiceSummary = new CabInvoiceGenerator().getInvoiceSummary(userRides.rides);
+				} catch (InvoiceException e) { }
 			}
 		}
 		return invoiceSummary;

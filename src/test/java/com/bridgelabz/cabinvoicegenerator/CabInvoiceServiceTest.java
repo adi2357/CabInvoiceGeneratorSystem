@@ -38,8 +38,12 @@ public class CabInvoiceServiceTest {
 				new Ride(0.3, 1, "normal"),
 				new Ride(1.0, 5, "normal")
 		};
-		double totalFare = invoiceGenerator.calculateFare(rides);
-		Assert.assertEquals(80.0, totalFare, 0.0);
+		try {
+			double totalFare = invoiceGenerator.calculateFare(rides);
+			Assert.assertEquals(80.0, totalFare, 0.0);
+		} catch (InvoiceException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	@Test
@@ -49,9 +53,13 @@ public class CabInvoiceServiceTest {
 				new Ride(0.3, 1, "normal"),
 				new Ride(1.0, 5, "normal")
 		};
-		EnhancedInvoice invoiceSummary = invoiceGenerator.getInvoiceSummary(rides);
-		EnhancedInvoice expectedInvoiceSummary = new EnhancedInvoice(3, 80.0);
-		Assert.assertEquals(expectedInvoiceSummary, invoiceSummary);
+		try {
+			EnhancedInvoice invoiceSummary = invoiceGenerator.getInvoiceSummary(rides);
+			EnhancedInvoice expectedInvoiceSummary = new EnhancedInvoice(3, 80.0);
+			Assert.assertEquals(expectedInvoiceSummary, invoiceSummary);
+		} catch (InvoiceException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	@Test
@@ -80,5 +88,20 @@ public class CabInvoiceServiceTest {
 		int time = 1;
 		double fare = invoiceGenerator.calculatePremiumRideFare(distance, time);
 		Assert.assertEquals(20.0, fare, 0.0);
+	}
+
+	@Test
+	public void givenMultipleRides_WhenRidesArePremium_ShouldReturnTotalPremiumRideFare() {
+		Ride[] rides = {
+				new Ride(5.0, 10, "premium"),
+				new Ride(1.0, 1, "premium"),
+				new Ride(1.0, 5, "premium")
+		};
+		try {
+			double totalFare = invoiceGenerator.calculateFare(rides);
+			Assert.assertEquals(140.0, totalFare, 0.0);
+		} catch (InvoiceException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
