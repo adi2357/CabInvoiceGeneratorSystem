@@ -13,7 +13,7 @@ public class CabInvoiceServiceTest {
 	}
 
 	@Test
-	public void givenDistanceAndTime_ShouldReturnTotalFare() {		
+	public void givenDistanceAndTime_ShouldReturnTotalFare() {
 		double distance = 5.0;
 		int time = 10;
 		double fare = invoiceGenerator.calculateFare(distance, time);
@@ -34,8 +34,20 @@ public class CabInvoiceServiceTest {
 				new Ride(5.0, 10),
 				new Ride(0.3, 1),
 				new Ride(1.0, 5)
-				};
+		};
 		double totalFare = invoiceGenerator.calculateFare(rides);
 		Assert.assertEquals(80.0, totalFare, 0.0);
+	}
+
+	@Test
+	public void givenMultipleRides_ShouldReturnInvoiceSummary() {
+		Ride[] rides = {
+				new Ride(5.0, 10),
+				new Ride(0.3, 1),
+				new Ride(1.0, 5)
+		};
+		EnhancedInvoice invoiceSummary = invoiceGenerator.getInvoiceSummary(rides);
+		EnhancedInvoice expectedInvoiceSummary = new EnhancedInvoice(3, 80.0);
+		Assert.assertEquals(expectedInvoiceSummary, invoiceSummary);
 	}
 }
