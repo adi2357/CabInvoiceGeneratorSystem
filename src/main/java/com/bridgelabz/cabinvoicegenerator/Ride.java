@@ -3,11 +3,11 @@ package com.bridgelabz.cabinvoicegenerator;
 public class Ride {
 	public double distance;
 	public int time;
-	public String category = "normal";
+	public CabRide rideType;
 
-	public Ride(double distance, int time, String category) {
+	public Ride(double distance, int time, CabRide rideType) {
 		this.distance = distance;
 		this.time = time;
-		this.category = category.toLowerCase();
+		this.rideType = rideType;
 	}
 }

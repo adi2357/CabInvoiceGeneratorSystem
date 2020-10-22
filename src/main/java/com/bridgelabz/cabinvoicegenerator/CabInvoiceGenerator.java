@@ -1,38 +1,26 @@
 package com.bridgelabz.cabinvoicegenerator;
 
-public class CabInvoiceGenerator {
-	private static final double COST_PER_KILOMETER = 10.0;
-	private static final int COST_PER_MINUTE = 1;
-	private static final double MINIMUM_RIDE_FARE = 5.0;
-	private static final double PREMIUM_RIDE_COST_PER_KILOMETER = 15.0;
-	private static final int PREMIUM_RIDE_COST_PER_MINUTE = 2;
-	private static final double MINIMUM_PREMIUM_RIDE_FARE = 20.0;
-	
+import java.util.List;
 
+public class CabInvoiceGenerator {
 	public double calculateFare(double distance, int time) {
-		double totalFare = distance * COST_PER_KILOMETER + time * COST_PER_MINUTE;
-		return Math.max(MINIMUM_RIDE_FARE, totalFare);
+		return CabRide.NORMAL.calculateFarePerRide(distance, time);
 	}
 	
 	public double calculatePremiumRideFare(double distance, int time) {
-		double totalFare = distance * PREMIUM_RIDE_COST_PER_KILOMETER + time * PREMIUM_RIDE_COST_PER_MINUTE;
-		return Math.max(MINIMUM_PREMIUM_RIDE_FARE, totalFare);
+		return CabRide.PREMIUM.calculateFarePerRide(distance, time);
 	}
 
-	public double calculateFare(Ride[] rides) throws InvoiceException{
+	public double calculateFare(List<Ride> rides) throws InvoiceException{
+		if(rides == null) {
+			throw new InvoiceException("Incorrect user id", InvoiceException.ExceptionType.NO_SUCH_USER);
+		}
 		double totalFareForAllRides = 0.0;
 		for (Ride ride : rides) {
-			if(ride.category.equals("normal"))
-				totalFareForAllRides += calculateFare(ride.distance, ride.time);
-			else if(ride.category.equals("premium"))
-				totalFareForAllRides += calculatePremiumRideFare(ride.distance, ride.time);
+			if(ride.rideType == CabRide.NORMAL || ride.rideType == CabRide.PREMIUM)
+				totalFareForAllRides += ride.rideType.calculateFarePerRide(ride);
 			else throw new InvoiceException("Invalid ride category", InvoiceException.ExceptionType.INVALID_RIDE_TYPE);
 		}
 		return totalFareForAllRides;
-	}
-
-	public EnhancedInvoice getInvoiceSummary(Ride[] rides) throws InvoiceException {
-		double totalFare = calculateFare(rides);
-		return new EnhancedInvoice(rides.length, totalFare);
 	}
 }

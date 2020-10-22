@@ -2,7 +2,7 @@ package com.bridgelabz.cabinvoicegenerator;
 
 public class InvoiceException extends Exception {
 	public enum ExceptionType {
-		INVALID_RIDE_TYPE
+		INVALID_RIDE_TYPE, NO_SUCH_USER
 	}
 
 	ExceptionType type;
