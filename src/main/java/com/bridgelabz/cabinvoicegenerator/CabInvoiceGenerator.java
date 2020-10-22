@@ -12,14 +12,12 @@ public class CabInvoiceGenerator {
 	}
 
 	public double calculateFare(List<Ride> rides) throws InvoiceException{
-		if(rides == null) {
-			throw new InvoiceException("Incorrect user id", InvoiceException.ExceptionType.NO_SUCH_USER);
-		}
 		double totalFareForAllRides = 0.0;
 		for (Ride ride : rides) {
-			if(ride.rideType == CabRide.NORMAL || ride.rideType == CabRide.PREMIUM)
+			if(!(ride.rideType instanceof CabRide))
+				throw new InvoiceException("Invalid ride category", InvoiceException.ExceptionType.INVALID_RIDE_TYPE);
+			else 
 				totalFareForAllRides += ride.rideType.calculateFarePerRide(ride);
-			else throw new InvoiceException("Invalid ride category", InvoiceException.ExceptionType.INVALID_RIDE_TYPE);
 		}
 		return totalFareForAllRides;
 	}

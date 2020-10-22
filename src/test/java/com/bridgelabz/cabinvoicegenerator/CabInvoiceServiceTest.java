@@ -139,4 +139,14 @@ public class CabInvoiceServiceTest {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	@Test
+	public void givenUserId_WhenRidesAddedToRepository_ShouldReturnUserRideListSize() {
+		int userId = 101;
+		Ride[] firstMonthRides = { new Ride(5.0, 10, CabRide.NORMAL), new Ride(0.3, 1, CabRide.PREMIUM), new Ride(1.0, 5, CabRide.PREMIUM) };
+		invoiceService.addRide(userId, Arrays.asList(firstMonthRides));
+		Ride[] secondMonthRides = { new Ride(6.0, 10, CabRide.NORMAL), new Ride(0.2, 1, CabRide.PREMIUM), new Ride(3.0, 5, CabRide.NORMAL) };
+		invoiceService.addRide(userId, Arrays.asList(secondMonthRides));
+		Assert.assertEquals(6, invoiceService.countUserRides(userId));
+	}
 }
